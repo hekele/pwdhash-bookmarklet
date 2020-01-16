@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <script type="text/javascript" src="hashed-password.js"></script>
+    <script type="text/javascript" src="md5.js"></script>
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta charset="utf-8"/>
+  </head>
+  <body>
+    <form onsubmit="generate_pw(); return false; ">
+      <input type="text" name="domainin" id="domainfield" onblur="fill_domain_field(this.value)"><br>
+      <input type="password" name="pwin" id="pwfield"><br>
+      <input type="submit" name=""><br>
+      <input type="text" name="pwout" id="pwfieldout" style="width: 10px; position: relative; left: -100px">
+    </form>
+    <script type="text/javascript">
+      var hash = window.location.hash.substr(1);
+      var uri = decodeURIComponent(hash);
+      fill_domain_field(uri);
+      document.getElementById("pwfield").focus();
+
+      function fill_domain_field(uri) {
+        var arr = uri.split("/");
+        if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(arr[2])){
+          var domain = arr[2];
+          document.getElementById("domainfield").value = domain;
+        }
+        else if (arr.length > 1) {
+          arr = arr[2].split(".");
+          arr.forEach(element => console.log(element));
+          var domain = arr[arr.length-2]+"."+arr[arr.length-1];
+          document.getElementById("domainfield").value = domain;
+        }
+      }
+      function generate_pw() {
+        var pass = document.getElementById("pwfield").value;
+        var domain = document.getElementById("domainfield").value;
+        pass = new String(new SPH_HashedPassword(pass, domain));
+        document.getElementById("pwfieldout").value = pass;
+        document.getElementById("pwfieldout").select();
+        document.execCommand("copy");
+        window.close();
+      }
+
+    </script>
+  </body>
+</html>
