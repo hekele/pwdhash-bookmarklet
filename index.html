@@ -25,9 +25,17 @@
           document.getElementById("domainfield").value = domain;
         }
         else if (arr.length > 1) {
-          arr = arr[2].split(".");
-          arr.forEach(element => console.log(element));
-          var domain = arr[arr.length-2]+"."+arr[arr.length-1];
+          if (arr[2].indexOf(":") > -1) {
+            arr[2] = arr[2].substr(0, arr[2].indexOf(":"));
+          }
+          if (arr[2].split(".").length < 4) {
+            arr = arr[2].split(".");
+            domain = arr[arr.length-2]+"."+arr[arr.length-1];
+          }
+          else {
+            domain = arr[2];
+          }
+          
           document.getElementById("domainfield").value = domain;
         }
       }
@@ -38,7 +46,8 @@
         document.getElementById("pwfieldout").value = pass;
         document.getElementById("pwfieldout").select();
         document.execCommand("copy");
-        window.close();
+        alert(pass);
+        //window.close();
       }
 
     </script>
